@@ -2,20 +2,10 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for uestc-newproject" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$PROJECT_DIR$/../../javaTool/03_maven/apache-maven-3.5.3/maven_repository/org/projectlombok/lombok/1.18.44/lombok-1.18.44.jar" />
-        </processorPath>
-        <module name="uestc-newproject" />
-      </profile>
+      <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="uestc-newproject" options="-parameters" />
-    </option>
+    <bytecodeTargetLevel>
+      <module name="uestc-newproject" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
