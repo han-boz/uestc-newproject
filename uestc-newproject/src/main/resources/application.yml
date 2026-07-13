@@ -23,8 +23,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:060414}
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/health_portal?useUnicode=true&characterEncoding=utf8mb4&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    password: ${MYSQL_PASSWORD:11111}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/health_portal?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
 
   data:
     redis:
