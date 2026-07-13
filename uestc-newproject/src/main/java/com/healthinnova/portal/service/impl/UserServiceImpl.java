@@ -11,11 +11,13 @@ import com.healthinnova.portal.entity.User;
 import com.healthinnova.portal.mapper.UserMapper;
 import com.healthinnova.portal.security.JwtTokenProvider;
 import com.healthinnova.portal.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import io.jsonwebtoken.Claims;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -29,14 +31,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-
-    @Autowired(required = false)
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public UserServiceImpl(PasswordEncoder passwordEncoder,
-                           JwtTokenProvider jwtTokenProvider) {
+                           JwtTokenProvider jwtTokenProvider,
+                           ObjectProvider<RedisTemplate<String, Object>> redisTemplateProvider) {
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
+        // 当 Redis 不可用时优雅降级（如 local 模式下无 Redis）
+        this.redisTemplate = redisTemplateProvider.getIfAvailable();
     }
 
     @Override
@@ -61,12 +64,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 生成 Token
         String token = jwtTokenProvider.generateToken(user.getId(), user.getUsername(), user.getRole());
+        // 解析一次，避免重复解析
+        Claims claims = jwtTokenProvider.parseToken(token);
+        Date expireDate = claims.getExpiration();
 
         // Token 存入 Redis（如果可用）
         if (redisTemplate != null) {
             redisTemplate.opsForValue().set(
                     Constants.REDIS_TOKEN_PREFIX + token, user.getUsername(),
-                    jwtTokenProvider.parseToken(token).getExpiration().getTime() - System.currentTimeMillis(),
+                    expireDate.getTime() - System.currentTimeMillis(),
                     TimeUnit.MILLISECONDS);
         }
 
@@ -86,7 +92,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userVO.setPhone(user.getPhone());
         userVO.setLastLoginTime(user.getLastLoginTime());
 
-        Date expireDate = jwtTokenProvider.parseToken(token).getExpiration();
         LocalDateTime expireTime = expireDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         return new LoginVO(token, "Bearer", expireTime, userVO);
@@ -100,6 +105,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return getOne(wrapper, false);
     }
 
+    @Transactional
     @Override
     public void changePassword(String username, String oldPassword, String newPassword) {
         User user = getByUsername(username);
@@ -113,10 +119,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         updateById(user);
     }
 
+    @Transactional
     @Override
     public void adminChangePassword(String targetUsername, String oldPassword, String newPassword) {
-        // 管理员也需要验证原密码
-        changePassword(targetUsername, oldPassword, newPassword);
+        // 管理员直接设置新密码，无需验证原密码
+        User user = getByUsername(targetUsername);
+        if (user == null) {
+            throw new ServiceException(GlobalErrorCodeConstants.NOT_FOUND.getCode(), "目标用户不存在");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        updateById(user);
     }
 
 }

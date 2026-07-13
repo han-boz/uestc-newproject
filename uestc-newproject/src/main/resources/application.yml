@@ -1,3 +1,16 @@
+# =============================================
+# 健康大数据应用创新研发中心 - 门户系统
+#
+# [默认] 使用 MySQL + Redis（profile = mysql）
+#   → 每名组员需修改本项目数据库密码为本地配置
+#   → 无 MySQL/Redis 的组员改用 local 模式启动
+#   → IDEA: 修改 Active Profiles 为 "local"
+#   → 命令行: ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+#
+# [备用] H2 嵌入式数据库，无需任何外部服务（profile = local）
+#   → 所有组员都能零配置直接运行
+# =============================================
+
 server:
   port: 8888
   servlet:
@@ -5,19 +18,19 @@ server:
 
 spring:
   profiles:
-    active: local
+    active: mysql
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 060414
-    url: jdbc:mysql://localhost:3306/health_portal?useUnicode=true&characterEncoding=utf8mb4&useSSL=false&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:060414}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/health_portal?useUnicode=true&characterEncoding=utf8mb4&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
 
   data:
     redis:
-      host: localhost
+      host: ${REDIS_HOST:localhost}
       port: 6379
-      password: 123456
+      password: ${REDIS_PASSWORD:123456}
       database: 1
       timeout: 1800000
       lettuce:
@@ -40,9 +53,8 @@ springdoc:
   swagger-ui:
     enabled: true
 
-# MyBatis-Plus
+# MyBatis-Plus（全部使用注解，无需 XML mapper）
 mybatis-plus:
-  mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.healthinnova.portal.entity
   configuration:
     map-underscore-to-camel-case: true

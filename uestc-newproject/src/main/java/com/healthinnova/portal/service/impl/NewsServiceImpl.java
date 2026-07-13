@@ -43,9 +43,12 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         if (news == null) {
             throw new ServiceException(GlobalErrorCodeConstants.NOT_FOUND);
         }
-        // 浏览量 +1
+        // 浏览量 +1（增量更新，避免全量写所有字段）
+        lambdaUpdate()
+                .setSql("view_count = view_count + 1")
+                .eq(News::getId, id)
+                .update();
         news.setViewCount(news.getViewCount() + 1);
-        updateById(news);
         return news;
     }
 

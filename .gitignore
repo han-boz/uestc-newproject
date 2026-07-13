@@ -1,2 +1,14 @@
-# 项目排除路径
-/uestc-newproject/target/.idea/
+# Maven 构建输出
+/uestc-newproject/target/
+
+# IDE 配置
+.idea/
+*.iml
+
+# 运行时数据（H2 文件数据库）
+/uestc-newproject/data/
+
+# OS 文件
+.DS_Store
+Thumbs.db
+*.swp

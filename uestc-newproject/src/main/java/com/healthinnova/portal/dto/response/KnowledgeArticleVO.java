@@ -14,6 +14,9 @@ public class KnowledgeArticleVO {
 
     private String title;
 
+    /** 正文内容（仅在详情接口返回） */
+    private String content;
+
     private String summary;
 
     private Long categoryId;

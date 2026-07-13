@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 健康大数据应用创新研发中心 - 门户系统
  */
-//注释1
-    //注释2
 @SpringBootApplication
 public class PortalApplication {
 

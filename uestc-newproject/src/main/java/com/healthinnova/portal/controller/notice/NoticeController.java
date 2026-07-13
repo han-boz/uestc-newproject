@@ -42,4 +42,23 @@ public class NoticeController {
         return Result.ok(pageResult);
     }
 
+    /**
+     * 公告详情
+     */
+    @GetMapping("/{id}")
+    public Result<NoticeVO> detail(@PathVariable Long id) {
+        Notice notice = noticeService.getById(id);
+        if (notice == null) {
+            return Result.fail(404, "公告不存在");
+        }
+        NoticeVO vo = new NoticeVO();
+        vo.setId(notice.getId());
+        vo.setTitle(notice.getTitle());
+        vo.setContent(notice.getContent());
+        vo.setLevel(notice.getLevel());
+        vo.setIsTop(notice.getIsTop() == 1);
+        vo.setPublishTime(notice.getPublishTime());
+        return Result.ok(vo);
+    }
+
 }

@@ -1,0 +1,18 @@
+# =============================================
+# MySQL + Redis 运行模式（默认模式）
+# 前置条件：本地 MySQL(3306) 和 Redis(6379) 已启动
+#
+# 各成员修改密码的方式：
+#   方式一：编辑 application.yml 中的 datasource.password 和 redis.password
+#   方式二：在此文件加上同名字段覆盖（优先级高于 application.yml）
+#   方式三：设环境变量 SPRING_DATASOURCE_PASSWORD=xxx
+#
+# 降级方案：使用 --spring.profiles.active=local 切换到 H2 模式
+# =============================================
+
+spring:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/init.sql
+      continue-on-error: true

@@ -1,6 +1,7 @@
 package com.healthinnova.portal.controller.service;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthinnova.portal.common.Result;
 import com.healthinnova.portal.dto.response.ServiceItemVO;
 import com.healthinnova.portal.entity.ServiceItem;
@@ -21,9 +22,11 @@ import java.util.stream.Collectors;
 public class ServiceController {
 
     private final ServiceItemService serviceItemService;
+    private final ObjectMapper objectMapper;
 
-    public ServiceController(ServiceItemService serviceItemService) {
+    public ServiceController(ServiceItemService serviceItemService, ObjectMapper objectMapper) {
         this.serviceItemService = serviceItemService;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -44,7 +47,8 @@ public class ServiceController {
             vo.setLinkUrl(item.getLinkUrl());
             vo.setEnabled(item.getEnabled() == 1);
             try {
-                vo.setFeatures(JSON.parseArray(item.getFeatures(), String.class));
+                vo.setFeatures(objectMapper.readValue(
+                        item.getFeatures(), new TypeReference<List<String>>() {}));
             } catch (Exception e) {
                 vo.setFeatures(Collections.emptyList());
             }

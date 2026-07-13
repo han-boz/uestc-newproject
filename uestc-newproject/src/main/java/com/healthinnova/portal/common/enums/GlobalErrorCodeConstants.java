@@ -21,9 +21,6 @@ public interface GlobalErrorCodeConstants {
     // ========== 服务端错误段 ==========
 
     ErrorCode INTERNAL_SERVER_ERROR = new ErrorCode(500, "系统异常");
-    ErrorCode UPDATE_ERROR = new ErrorCode(500, "更新失败");
-    ErrorCode ADD_ERROR = new ErrorCode(500, "新增失败");
-    ErrorCode DELETE_ERROR = new ErrorCode(500, "删除失败");
 
     // ========== 自定义错误段 ==========
     ErrorCode REPEATED_REQUESTS = new ErrorCode(900, "重复请求，请稍后重试");

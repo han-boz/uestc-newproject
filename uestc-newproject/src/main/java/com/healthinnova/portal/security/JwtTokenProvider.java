@@ -76,22 +76,42 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 从 Token 中获取用户名
+     * 从 Claims 中获取用户名（避免重复解析 Token）
      */
+    public String getUsername(Claims claims) {
+        return claims.getSubject();
+    }
+
+    /**
+     * 从 Claims 中获取用户 ID
+     */
+    public Long getUserId(Claims claims) {
+        return claims.get("userId", Long.class);
+    }
+
+    /**
+     * 从 Claims 中获取角色
+     */
+    public String getRole(Claims claims) {
+        return claims.get("role", String.class);
+    }
+
+    // ===== 以下为兼容旧接口，内部仍会解析 Token =====
+
+    /** @deprecated 优先使用 {@link #getUsername(Claims)} 避免重复解析 */
+    @Deprecated
     public String getUsername(String token) {
         return parseToken(token).getSubject();
     }
 
-    /**
-     * 从 Token 中获取用户 ID
-     */
+    /** @deprecated 优先使用 {@link #getUserId(Claims)} 避免重复解析 */
+    @Deprecated
     public Long getUserId(String token) {
         return parseToken(token).get("userId", Long.class);
     }
 
-    /**
-     * 从 Token 中获取角色
-     */
+    /** @deprecated 优先使用 {@link #getRole(Claims)} 避免重复解析 */
+    @Deprecated
     public String getRole(String token) {
         return parseToken(token).get("role", String.class);
     }

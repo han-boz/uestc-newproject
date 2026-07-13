@@ -1,6 +1,7 @@
 package com.healthinnova.portal.security;
 
 import com.healthinnova.portal.common.Constants;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,10 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = extractToken(request);
 
-        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+        if (StringUtils.hasText(token)) {
             try {
-                String username = jwtTokenProvider.getUsername(token);
-                String role = jwtTokenProvider.getRole(token);
+                // 只解析一次 Token，提取所有 Claims
+                Claims claims = jwtTokenProvider.parseToken(token);
+                String username = jwtTokenProvider.getUsername(claims);
+                String role = jwtTokenProvider.getRole(claims);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(

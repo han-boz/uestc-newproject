@@ -1,6 +1,7 @@
 package com.healthinnova.portal.controller.portal;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthinnova.portal.common.Result;
 import com.healthinnova.portal.dto.response.AboutVO;
 import com.healthinnova.portal.dto.response.MilestoneVO;
@@ -25,10 +26,13 @@ public class PortalController {
 
     private final StatisticsService statisticsService;
     private final AboutService aboutService;
+    private final ObjectMapper objectMapper;
 
-    public PortalController(StatisticsService statisticsService, AboutService aboutService) {
+    public PortalController(StatisticsService statisticsService, AboutService aboutService,
+                            ObjectMapper objectMapper) {
         this.statisticsService = statisticsService;
         this.aboutService = aboutService;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -66,7 +70,8 @@ public class PortalController {
 
         // 解析 JSON 发展历程
         try {
-            List<MilestoneVO> milestones = JSON.parseArray(about.getMilestones(), MilestoneVO.class);
+            List<MilestoneVO> milestones = objectMapper.readValue(
+                    about.getMilestones(), new TypeReference<List<MilestoneVO>>() {});
             vo.setMilestones(milestones != null ? milestones : Collections.emptyList());
         } catch (Exception e) {
             vo.setMilestones(Collections.emptyList());

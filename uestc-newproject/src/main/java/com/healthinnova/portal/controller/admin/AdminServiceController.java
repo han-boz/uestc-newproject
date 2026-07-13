@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.healthinnova.portal.common.Result;
 import com.healthinnova.portal.entity.ServiceItem;
 import com.healthinnova.portal.service.ServiceItemService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,6 +48,7 @@ public class AdminServiceController {
         return Result.ok();
     }
 
+    @Transactional
     @PutMapping("/sort")
     public Result<?> updateSort(@RequestBody List<Map<String, Object>> sortList) {
         for (Map<String, Object> entry : sortList) {
