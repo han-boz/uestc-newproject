@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
 public class PolicyServiceImpl extends ServiceImpl<PolicyMapper, Policy> implements PolicyService {
 
     @Override
-    public IPage<Policy> getPublishedPage(Integer pageNum, Integer pageSize, String tag) {
+    public IPage<Policy> getPublishedPage(Integer pageNum, Integer pageSize, String tag, String keyword, String sortBy, String sortOrder) {
         Page<Policy> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Policy> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Policy::getStatus, "published");
@@ -25,9 +25,23 @@ public class PolicyServiceImpl extends ServiceImpl<PolicyMapper, Policy> impleme
         if (StringUtils.hasText(tag)) {
             wrapper.eq(Policy::getTag, tag);
         }
+        if (StringUtils.hasText(keyword)) {
+            wrapper.like(Policy::getTitle, keyword);
+        }
 
-        wrapper.orderByDesc(Policy::getPublishTime);
+        applySort(wrapper, sortBy, sortOrder);
         return page(page, wrapper);
+    }
+
+    private void applySort(LambdaQueryWrapper<Policy> wrapper, String sortBy, String sortOrder) {
+        boolean asc = "asc".equalsIgnoreCase(sortOrder);
+        if ("id".equals(sortBy)) {
+            wrapper.orderByAsc(Policy::getId);
+        } else if ("updateTime".equals(sortBy)) {
+            wrapper.orderByDesc(Policy::getUpdateTime).orderByDesc(Policy::getId);
+        } else {
+            wrapper.orderByDesc(Policy::getPublishTime).orderByDesc(Policy::getId);
+        }
     }
 
 }

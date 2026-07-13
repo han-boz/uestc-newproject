@@ -7,6 +7,7 @@ import com.healthinnova.portal.common.PageResult;
 import com.healthinnova.portal.common.Result;
 import com.healthinnova.portal.entity.Notice;
 import com.healthinnova.portal.service.NoticeService;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,12 +25,28 @@ public class AdminNoticeController {
 
     @GetMapping("/list")
     public Result<PageResult<Notice>> list(@RequestParam(defaultValue = "1") Integer pageNum,
-                                            @RequestParam(defaultValue = "10") Integer pageSize) {
+                                            @RequestParam(defaultValue = "8") Integer pageSize,
+                                            @RequestParam(required = false) String keyword,
+                                            @RequestParam(required = false) String sortBy,
+                                            @RequestParam(defaultValue = "desc") String sortOrder) {
         Page<Notice> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Notice> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByDesc(Notice::getIsTop).orderByDesc(Notice::getCreateTime);
+        if (StringUtils.hasText(keyword)) wrapper.like(Notice::getTitle, keyword);
+        applySortNotice(wrapper, sortBy, sortOrder);
         IPage<Notice> result = noticeService.page(page, wrapper);
         return Result.ok(PageResult.of(result));
+    }
+
+    private void applySortNotice(LambdaQueryWrapper<Notice> wrapper, String sortBy, String sortOrder) {
+        boolean asc = "asc".equalsIgnoreCase(sortOrder);
+        wrapper.orderByDesc(Notice::getIsTop);
+        if ("id".equals(sortBy)) {
+            wrapper.orderByAsc(Notice::getId);
+        } else if ("updateTime".equals(sortBy)) {
+            wrapper.orderByDesc(Notice::getUpdateTime).orderByDesc(Notice::getId);
+        } else {
+            wrapper.orderByDesc(Notice::getPublishTime).orderByDesc(Notice::getId);
+        }
     }
 
     @GetMapping("/{id}")

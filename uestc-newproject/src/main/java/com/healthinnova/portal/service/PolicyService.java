@@ -12,6 +12,6 @@ public interface PolicyService extends IService<Policy> {
     /**
      * 分页查询已发布政策
      */
-    IPage<Policy> getPublishedPage(Integer pageNum, Integer pageSize, String tag);
+    IPage<Policy> getPublishedPage(Integer pageNum, Integer pageSize, String tag, String keyword, String sortBy, String sortOrder);
 
 }

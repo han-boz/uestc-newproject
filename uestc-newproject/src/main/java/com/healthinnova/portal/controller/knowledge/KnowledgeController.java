@@ -1,11 +1,8 @@
 package com.healthinnova.portal.controller.knowledge;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.healthinnova.portal.common.PageResult;
 import com.healthinnova.portal.common.Result;
-import com.healthinnova.portal.common.enums.GlobalErrorCodeConstants;
-import com.healthinnova.portal.common.exception.ServiceException;
 import com.healthinnova.portal.dto.response.KnowledgeArticleVO;
 import com.healthinnova.portal.dto.response.KnowledgeCategoryVO;
 import com.healthinnova.portal.entity.KnowledgeArticle;
@@ -60,8 +57,11 @@ public class KnowledgeController {
     @GetMapping("/articles")
     public Result<PageResult<KnowledgeArticleVO>> articles(@RequestParam Long categoryId,
                                                             @RequestParam(defaultValue = "1") Integer pageNum,
-                                                            @RequestParam(defaultValue = "10") Integer pageSize) {
-        IPage<KnowledgeArticle> page = articleService.getPageByCategory(categoryId, pageNum, pageSize);
+                                                            @RequestParam(defaultValue = "8") Integer pageSize,
+                                                            @RequestParam(required = false) String keyword,
+                                                            @RequestParam(required = false) String sortBy,
+                                                            @RequestParam(defaultValue = "desc") String sortOrder) {
+        IPage<KnowledgeArticle> page = articleService.getPageByCategory(categoryId, pageNum, pageSize, keyword, sortBy, sortOrder);
 
         PageResult<KnowledgeArticleVO> pageResult = PageResult.of(page.convert(article -> {
             KnowledgeArticleVO vo = new KnowledgeArticleVO();
@@ -71,39 +71,11 @@ public class KnowledgeController {
             vo.setCategoryId(article.getCategoryId());
             vo.setViewCount(article.getViewCount());
             vo.setCreateTime(article.getCreateTime());
+            vo.setPublishTime(article.getPublishTime());
             return vo;
         }));
 
         return Result.ok(pageResult);
-    }
-
-    /**
-     * 文章详情
-     */
-    @GetMapping("/article/{id}")
-    public Result<KnowledgeArticleVO> articleDetail(@PathVariable Long id) {
-        KnowledgeArticle article = articleService.getById(id);
-        if (article == null) {
-            throw new ServiceException(GlobalErrorCodeConstants.NOT_FOUND);
-        }
-        // 浏览量 +1（增量更新）
-        LambdaQueryWrapper<KnowledgeArticle> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(KnowledgeArticle::getId, id);
-        articleService.lambdaUpdate()
-                .setSql("view_count = view_count + 1")
-                .eq(KnowledgeArticle::getId, id)
-                .update();
-        article.setViewCount(article.getViewCount() + 1);
-
-        KnowledgeArticleVO vo = new KnowledgeArticleVO();
-        vo.setId(article.getId());
-        vo.setTitle(article.getTitle());
-        vo.setSummary(article.getSummary());
-        vo.setContent(article.getContent());
-        vo.setCategoryId(article.getCategoryId());
-        vo.setViewCount(article.getViewCount());
-        vo.setCreateTime(article.getCreateTime());
-        return Result.ok(vo);
     }
 
 }

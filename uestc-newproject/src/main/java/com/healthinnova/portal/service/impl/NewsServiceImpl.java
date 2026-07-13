@@ -32,9 +32,24 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             wrapper.like(News::getTitle, request.getKeyword());
         }
 
-        wrapper.orderByDesc(News::getIsTop)
-                .orderByDesc(News::getPublishTime);
+        // 动态排序
+        applySort(wrapper, request.getSortBy(), request.getSortOrder());
         return page(page, wrapper);
+    }
+
+    /**
+     * 动态排序：置顶优先 → 所选字段 → ID
+     */
+    private void applySort(LambdaQueryWrapper<News> wrapper, String sortBy, String sortOrder) {
+        boolean asc = "asc".equalsIgnoreCase(sortOrder);
+        wrapper.orderByDesc(News::getIsTop);
+        if ("id".equals(sortBy)) {
+            wrapper.orderByAsc(News::getId);
+        } else if ("updateTime".equals(sortBy)) {
+            wrapper.orderByDesc(News::getUpdateTime).orderByDesc(News::getId);
+        } else {
+            wrapper.orderByDesc(News::getPublishTime).orderByDesc(News::getId);
+        }
     }
 
     @Override
@@ -43,12 +58,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         if (news == null) {
             throw new ServiceException(GlobalErrorCodeConstants.NOT_FOUND);
         }
-        // 浏览量 +1（增量更新，避免全量写所有字段）
-        lambdaUpdate()
-                .setSql("view_count = view_count + 1")
-                .eq(News::getId, id)
-                .update();
+        // 浏览量 +1
         news.setViewCount(news.getViewCount() + 1);
+        updateById(news);
         return news;
     }
 

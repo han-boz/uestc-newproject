@@ -26,16 +26,31 @@ public class AdminNewsController {
     /** 新闻列表（含所有状态） */
     @GetMapping("/list")
     public Result<PageResult<News>> list(@RequestParam(defaultValue = "1") Integer pageNum,
-                                         @RequestParam(defaultValue = "10") Integer pageSize,
+                                         @RequestParam(defaultValue = "8") Integer pageSize,
                                          @RequestParam(required = false) String category,
-                                         @RequestParam(required = false) String keyword) {
+                                         @RequestParam(required = false) String keyword,
+                                         @RequestParam(required = false) String sortBy,
+                                         @RequestParam(defaultValue = "desc") String sortOrder) {
         Page<News> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<News> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(category)) wrapper.eq(News::getCategory, category);
         if (StringUtils.hasText(keyword)) wrapper.like(News::getTitle, keyword);
-        wrapper.orderByDesc(News::getIsTop).orderByDesc(News::getCreateTime);
+        // 动态排序
+        applySort(wrapper, sortBy, sortOrder);
         IPage<News> result = newsService.page(page, wrapper);
         return Result.ok(PageResult.of(result));
+    }
+
+    private void applySort(LambdaQueryWrapper<News> wrapper, String sortBy, String sortOrder) {
+        boolean asc = "asc".equalsIgnoreCase(sortOrder);
+        wrapper.orderByDesc(News::getIsTop);
+        if ("id".equals(sortBy)) {
+            wrapper.orderByAsc(News::getId);
+        } else if ("updateTime".equals(sortBy)) {
+            wrapper.orderByDesc(News::getUpdateTime).orderByDesc(News::getId);
+        } else {
+            wrapper.orderByDesc(News::getPublishTime).orderByDesc(News::getId);
+        }
     }
 
     @GetMapping("/{id}")
