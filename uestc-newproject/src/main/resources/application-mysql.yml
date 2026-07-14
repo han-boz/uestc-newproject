@@ -9,6 +9,9 @@
 #   方式三：设环境变量 SPRING_DATASOURCE_PASSWORD=xxx
 #
 # 降级方案：使用 --spring.profiles.active=local 切换到 H2 模式
+#
+# 如数据库出现重复数据，运行清理脚本：
+#   mysql -u root -p < src/main/resources/sql/cleanup.sql
 # =============================================
 
 spring:
