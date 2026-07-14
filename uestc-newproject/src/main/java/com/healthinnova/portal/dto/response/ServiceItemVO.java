@@ -4,9 +4,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * 服务目录 VO
- */
 @Data
 public class ServiceItemVO {
 

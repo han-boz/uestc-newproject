@@ -4,9 +4,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * 知识库文章 VO
- */
 @Data
 public class KnowledgeArticleVO {
 

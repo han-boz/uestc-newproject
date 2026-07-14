@@ -38,7 +38,6 @@ public class AdminPolicyController {
     }
 
     private void applySortPolicy(LambdaQueryWrapper<Policy> wrapper, String sortBy, String sortOrder) {
-        boolean asc = "asc".equalsIgnoreCase(sortOrder);
         if ("id".equals(sortBy)) {
             wrapper.orderByAsc(Policy::getId);
         } else if ("updateTime".equals(sortBy)) {

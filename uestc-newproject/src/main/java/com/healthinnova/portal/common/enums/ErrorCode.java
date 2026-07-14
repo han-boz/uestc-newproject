@@ -2,9 +2,6 @@ package com.healthinnova.portal.common.enums;
 
 import lombok.Data;
 
-/**
- * 错误码对象
- */
 @Data
 public class ErrorCode {
 

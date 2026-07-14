@@ -5,9 +5,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * 登录响应 VO
- */
 @Data
 @AllArgsConstructor
 public class LoginVO {

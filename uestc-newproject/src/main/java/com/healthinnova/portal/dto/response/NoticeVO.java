@@ -4,9 +4,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * 通知公告 VO
- */
 @Data
 public class NoticeVO {
 

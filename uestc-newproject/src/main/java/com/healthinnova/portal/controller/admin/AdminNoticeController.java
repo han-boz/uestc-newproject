@@ -38,7 +38,6 @@ public class AdminNoticeController {
     }
 
     private void applySortNotice(LambdaQueryWrapper<Notice> wrapper, String sortBy, String sortOrder) {
-        boolean asc = "asc".equalsIgnoreCase(sortOrder);
         wrapper.orderByDesc(Notice::getIsTop);
         if ("id".equals(sortBy)) {
             wrapper.orderByAsc(Notice::getId);

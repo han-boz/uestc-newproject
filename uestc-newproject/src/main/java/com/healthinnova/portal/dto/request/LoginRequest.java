@@ -3,9 +3,6 @@ package com.healthinnova.portal.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-/**
- * 登录请求
- */
 @Data
 public class LoginRequest {
 

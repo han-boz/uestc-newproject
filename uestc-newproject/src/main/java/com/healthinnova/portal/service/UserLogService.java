@@ -4,9 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.healthinnova.portal.entity.UserLog;
 
-/**
- * 用户操作日志服务
- */
 public interface UserLogService extends IService<UserLog> {
 
     /**

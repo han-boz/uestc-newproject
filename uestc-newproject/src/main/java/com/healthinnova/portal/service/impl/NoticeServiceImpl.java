@@ -9,9 +9,6 @@ import com.healthinnova.portal.mapper.NoticeMapper;
 import com.healthinnova.portal.service.NoticeService;
 import org.springframework.stereotype.Service;
 
-/**
- * 通知公告服务实现
- */
 @Service
 public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService {
 

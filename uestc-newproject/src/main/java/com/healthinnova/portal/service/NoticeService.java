@@ -4,9 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.healthinnova.portal.entity.Notice;
 
-/**
- * 通知公告服务
- */
 public interface NoticeService extends IService<Notice> {
 
     /**

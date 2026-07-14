@@ -6,9 +6,6 @@ import com.healthinnova.portal.mapper.StatisticsMapper;
 import com.healthinnova.portal.service.StatisticsService;
 import org.springframework.stereotype.Service;
 
-/**
- * 平台统计服务实现
- */
 @Service
 public class StatisticsServiceImpl extends ServiceImpl<StatisticsMapper, Statistics> implements StatisticsService {
 

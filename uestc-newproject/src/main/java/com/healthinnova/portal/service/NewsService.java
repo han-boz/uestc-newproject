@@ -5,9 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.healthinnova.portal.dto.request.NewsQueryRequest;
 import com.healthinnova.portal.entity.News;
 
-/**
- * 新闻服务
- */
 public interface NewsService extends IService<News> {
 
     /**

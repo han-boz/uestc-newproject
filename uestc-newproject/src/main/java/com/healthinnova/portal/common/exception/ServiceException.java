@@ -3,9 +3,6 @@ package com.healthinnova.portal.common.exception;
 import com.healthinnova.portal.common.enums.ErrorCode;
 import lombok.Getter;
 
-/**
- * 业务逻辑异常
- */
 @Getter
 public final class ServiceException extends RuntimeException {
 

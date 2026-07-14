@@ -10,9 +10,6 @@ import com.healthinnova.portal.service.KnowledgeArticleService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-/**
- * 知识库文章服务实现
- */
 @Service
 public class KnowledgeArticleServiceImpl extends ServiceImpl<KnowledgeArticleMapper, KnowledgeArticle>
         implements KnowledgeArticleService {
@@ -31,7 +28,6 @@ public class KnowledgeArticleServiceImpl extends ServiceImpl<KnowledgeArticleMap
     }
 
     private void applySort(LambdaQueryWrapper<KnowledgeArticle> wrapper, String sortBy, String sortOrder) {
-        boolean asc = "asc".equalsIgnoreCase(sortOrder);
         if ("id".equals(sortBy)) {
             wrapper.orderByAsc(KnowledgeArticle::getId);
         } else if ("updateTime".equals(sortBy)) {

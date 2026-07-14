@@ -5,9 +5,6 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * 平台统计 VO
- */
 @Data
 public class StatisticsVO {
 

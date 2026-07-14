@@ -5,9 +5,6 @@ import com.healthinnova.portal.entity.ServiceItem;
 
 import java.util.List;
 
-/**
- * 服务目录服务
- */
 public interface ServiceItemService extends IService<ServiceItem> {
 
     /**

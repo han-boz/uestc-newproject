@@ -9,9 +9,6 @@ import com.healthinnova.portal.mapper.UserLogMapper;
 import com.healthinnova.portal.service.UserLogService;
 import org.springframework.stereotype.Service;
 
-/**
- * 用户操作日志服务实现
- */
 @Service
 public class UserLogServiceImpl extends ServiceImpl<UserLogMapper, UserLog> implements UserLogService {
 

@@ -3,9 +3,6 @@ package com.healthinnova.portal.dto.request;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * 新闻查询请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class NewsQueryRequest extends PageRequest {

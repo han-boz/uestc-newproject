@@ -13,9 +13,6 @@ import com.healthinnova.portal.service.NewsService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-/**
- * 新闻服务实现
- */
 @Service
 public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements NewsService {
 
@@ -41,7 +38,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
      * 动态排序：置顶优先 → 所选字段 → ID
      */
     private void applySort(LambdaQueryWrapper<News> wrapper, String sortBy, String sortOrder) {
-        boolean asc = "asc".equalsIgnoreCase(sortOrder);
         wrapper.orderByDesc(News::getIsTop);
         if ("id".equals(sortBy)) {
             wrapper.orderByAsc(News::getId);

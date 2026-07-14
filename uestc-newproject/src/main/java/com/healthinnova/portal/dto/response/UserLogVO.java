@@ -4,9 +4,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * 用户操作日志 VO
- */
 @Data
 public class UserLogVO {
 

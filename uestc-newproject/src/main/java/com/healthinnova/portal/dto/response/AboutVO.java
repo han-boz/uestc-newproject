@@ -4,9 +4,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * 关于我们 VO
- */
 @Data
 public class AboutVO {
 

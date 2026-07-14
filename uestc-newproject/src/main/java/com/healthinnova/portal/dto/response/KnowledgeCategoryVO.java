@@ -2,9 +2,6 @@ package com.healthinnova.portal.dto.response;
 
 import lombok.Data;
 
-/**
- * 知识库分类 VO
- */
 @Data
 public class KnowledgeCategoryVO {
 

@@ -5,9 +5,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * 新闻 VO
- */
 @Data
 public class NewsVO {
 

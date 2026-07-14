@@ -42,7 +42,6 @@ public class AdminNewsController {
     }
 
     private void applySort(LambdaQueryWrapper<News> wrapper, String sortBy, String sortOrder) {
-        boolean asc = "asc".equalsIgnoreCase(sortOrder);
         wrapper.orderByDesc(News::getIsTop);
         if ("id".equals(sortBy)) {
             wrapper.orderByAsc(News::getId);

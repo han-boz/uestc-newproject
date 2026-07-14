@@ -4,9 +4,6 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-/**
- * 卫生政策 VO
- */
 @Data
 public class PolicyVO {
 

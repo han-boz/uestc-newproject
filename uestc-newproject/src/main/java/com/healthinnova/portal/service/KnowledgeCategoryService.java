@@ -6,9 +6,6 @@ import com.healthinnova.portal.entity.KnowledgeCategory;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 知识库分类服务
- */
 public interface KnowledgeCategoryService extends IService<KnowledgeCategory> {
 
     /**

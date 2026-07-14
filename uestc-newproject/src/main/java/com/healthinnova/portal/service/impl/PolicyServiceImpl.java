@@ -10,9 +10,6 @@ import com.healthinnova.portal.service.PolicyService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-/**
- * 卫生政策服务实现
- */
 @Service
 public class PolicyServiceImpl extends ServiceImpl<PolicyMapper, Policy> implements PolicyService {
 
@@ -34,7 +31,6 @@ public class PolicyServiceImpl extends ServiceImpl<PolicyMapper, Policy> impleme
     }
 
     private void applySort(LambdaQueryWrapper<Policy> wrapper, String sortBy, String sortOrder) {
-        boolean asc = "asc".equalsIgnoreCase(sortOrder);
         if ("id".equals(sortBy)) {
             wrapper.orderByAsc(Policy::getId);
         } else if ("updateTime".equals(sortBy)) {

@@ -4,9 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.healthinnova.portal.entity.KnowledgeArticle;
 
-/**
- * 知识库文章服务
- */
 public interface KnowledgeArticleService extends IService<KnowledgeArticle> {
 
     /**
