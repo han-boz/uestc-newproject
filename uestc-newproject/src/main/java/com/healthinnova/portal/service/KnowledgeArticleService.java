@@ -10,8 +10,8 @@ import com.healthinnova.portal.entity.KnowledgeArticle;
 public interface KnowledgeArticleService extends IService<KnowledgeArticle> {
 
     /**
-     * 按分类分页查询文章
+     * 按分类分页查询文章（支持搜索和排序）
      */
-    IPage<KnowledgeArticle> getPageByCategory(Long categoryId, Integer pageNum, Integer pageSize);
+    IPage<KnowledgeArticle> getPageByCategory(Long categoryId, Integer pageNum, Integer pageSize, String keyword, String sortBy, String sortOrder);
 
 }

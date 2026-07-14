@@ -7,6 +7,7 @@ import com.healthinnova.portal.common.PageResult;
 import com.healthinnova.portal.common.Result;
 import com.healthinnova.portal.entity.Policy;
 import com.healthinnova.portal.service.PolicyService;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,12 +25,27 @@ public class AdminPolicyController {
 
     @GetMapping("/list")
     public Result<PageResult<Policy>> list(@RequestParam(defaultValue = "1") Integer pageNum,
-                                            @RequestParam(defaultValue = "10") Integer pageSize) {
+                                            @RequestParam(defaultValue = "8") Integer pageSize,
+                                            @RequestParam(required = false) String keyword,
+                                            @RequestParam(required = false) String sortBy,
+                                            @RequestParam(defaultValue = "desc") String sortOrder) {
         Page<Policy> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Policy> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByDesc(Policy::getCreateTime);
+        if (StringUtils.hasText(keyword)) wrapper.like(Policy::getTitle, keyword);
+        applySortPolicy(wrapper, sortBy, sortOrder);
         IPage<Policy> result = policyService.page(page, wrapper);
         return Result.ok(PageResult.of(result));
+    }
+
+    private void applySortPolicy(LambdaQueryWrapper<Policy> wrapper, String sortBy, String sortOrder) {
+        boolean asc = "asc".equalsIgnoreCase(sortOrder);
+        if ("id".equals(sortBy)) {
+            wrapper.orderByAsc(Policy::getId);
+        } else if ("updateTime".equals(sortBy)) {
+            wrapper.orderByDesc(Policy::getUpdateTime).orderByDesc(Policy::getId);
+        } else {
+            wrapper.orderByDesc(Policy::getPublishTime).orderByDesc(Policy::getId);
+        }
     }
 
     @GetMapping("/{id}")

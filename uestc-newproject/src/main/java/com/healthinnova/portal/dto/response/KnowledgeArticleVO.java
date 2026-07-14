@@ -25,6 +25,8 @@ public class KnowledgeArticleVO {
 
     private Integer viewCount;
 
+    private LocalDateTime publishTime;
+
     private LocalDateTime createTime;
 
 }

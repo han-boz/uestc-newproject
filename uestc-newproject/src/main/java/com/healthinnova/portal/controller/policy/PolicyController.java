@@ -26,9 +26,12 @@ public class PolicyController {
      */
     @GetMapping("/list")
     public Result<PageResult<PolicyVO>> list(@RequestParam(defaultValue = "1") Integer pageNum,
-                                             @RequestParam(defaultValue = "4") Integer pageSize,
-                                             @RequestParam(required = false) String tag) {
-        IPage<Policy> page = policyService.getPublishedPage(pageNum, pageSize, tag);
+                                             @RequestParam(defaultValue = "8") Integer pageSize,
+                                             @RequestParam(required = false) String tag,
+                                             @RequestParam(required = false) String keyword,
+                                             @RequestParam(required = false) String sortBy,
+                                             @RequestParam(defaultValue = "desc") String sortOrder) {
+        IPage<Policy> page = policyService.getPublishedPage(pageNum, pageSize, tag, keyword, sortBy, sortOrder);
 
         PageResult<PolicyVO> pageResult = PageResult.of(page.convert(policy -> {
             PolicyVO vo = new PolicyVO();

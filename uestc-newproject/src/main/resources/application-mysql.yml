@@ -1,9 +1,10 @@
 # =============================================
-# MySQL + Redis 运行模式（默认模式）
-# 前置条件：本地 MySQL(3306) 和 Redis(6379) 已启动
+# MySQL 运行模式（默认模式）
+# 前置条件：本地 MySQL(3306) 已启动
+# Redis 已被排除，不依赖 Redis 服务
 #
 # 各成员修改密码的方式：
-#   方式一：编辑 application.yml 中的 datasource.password 和 redis.password
+#   方式一：编辑 application.yml 中的 datasource.password
 #   方式二：在此文件加上同名字段覆盖（优先级高于 application.yml）
 #   方式三：设环境变量 SPRING_DATASOURCE_PASSWORD=xxx
 #
@@ -11,6 +12,11 @@
 # =============================================
 
 spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
   sql:
     init:
       mode: always

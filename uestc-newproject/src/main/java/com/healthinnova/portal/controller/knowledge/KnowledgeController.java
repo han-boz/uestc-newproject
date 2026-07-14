@@ -55,13 +55,16 @@ public class KnowledgeController {
     }
 
     /**
-     * 按分类获取文章列表
+     * 按分类获取文章列表（支持搜索和排序）
      */
     @GetMapping("/articles")
     public Result<PageResult<KnowledgeArticleVO>> articles(@RequestParam Long categoryId,
                                                             @RequestParam(defaultValue = "1") Integer pageNum,
-                                                            @RequestParam(defaultValue = "10") Integer pageSize) {
-        IPage<KnowledgeArticle> page = articleService.getPageByCategory(categoryId, pageNum, pageSize);
+                                                            @RequestParam(defaultValue = "8") Integer pageSize,
+                                                            @RequestParam(required = false) String keyword,
+                                                            @RequestParam(required = false) String sortBy,
+                                                            @RequestParam(defaultValue = "desc") String sortOrder) {
+        IPage<KnowledgeArticle> page = articleService.getPageByCategory(categoryId, pageNum, pageSize, keyword, sortBy, sortOrder);
 
         PageResult<KnowledgeArticleVO> pageResult = PageResult.of(page.convert(article -> {
             KnowledgeArticleVO vo = new KnowledgeArticleVO();
@@ -71,6 +74,7 @@ public class KnowledgeController {
             vo.setCategoryId(article.getCategoryId());
             vo.setViewCount(article.getViewCount());
             vo.setCreateTime(article.getCreateTime());
+            vo.setPublishTime(article.getPublishTime());
             return vo;
         }));
 
@@ -78,7 +82,7 @@ public class KnowledgeController {
     }
 
     /**
-     * 文章详情
+     * 文章详情（浏览量增量更新）
      */
     @GetMapping("/article/{id}")
     public Result<KnowledgeArticleVO> articleDetail(@PathVariable Long id) {
@@ -87,8 +91,6 @@ public class KnowledgeController {
             throw new ServiceException(GlobalErrorCodeConstants.NOT_FOUND);
         }
         // 浏览量 +1（增量更新）
-        LambdaQueryWrapper<KnowledgeArticle> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(KnowledgeArticle::getId, id);
         articleService.lambdaUpdate()
                 .setSql("view_count = view_count + 1")
                 .eq(KnowledgeArticle::getId, id)
