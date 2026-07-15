@@ -1,7 +1,10 @@
 -- =============================================
 -- 数据库清理脚本
 -- 用途：清除所有重复数据，确保每人数据库一致
--- 运行方式：mysql -u root -p < src/main/resources/sql/cleanup.sql
+-- 运行方式（在 uestc-newproject/uestc-newproject/ 目录下执行）：
+--   mysql -u root -p < src/main/resources/sql/cleanup.sql
+-- 或者用绝对路径：
+--   mysql -u root -p < F:\java\uestc-newproject\uestc-newproject\src\main\resources\sql\cleanup.sql
 -- 安全：可重复运行，不会破坏已有数据
 -- =============================================
 
