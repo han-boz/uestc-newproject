@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `sys_statistics` (
 );
 
 INSERT INTO `sys_statistics` (`data_source_count`, `data_entry_count`, `analysis_model_count`, `availability_rate`)
-VALUES (128, 520000, 23, 99.96);
+VALUES (6, 64, 15, 99.50);
 
 -- 4. 关于我们表
 CREATE TABLE IF NOT EXISTS `sys_about` (
