@@ -13,6 +13,8 @@ public class KnowledgeArticleVO {
 
     private String summary;
 
+    private String content;
+
     private Long categoryId;
 
     private String categoryName;

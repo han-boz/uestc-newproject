@@ -52,6 +52,24 @@ public class KnowledgeController {
     }
 
     /**
+     * 获取文章详情（浏览量+1）
+     */
+    @GetMapping("/article/{id}")
+    public Result<KnowledgeArticleVO> articleDetail(@PathVariable Long id) {
+        KnowledgeArticle article = articleService.getDetail(id);
+        KnowledgeArticleVO vo = new KnowledgeArticleVO();
+        vo.setId(article.getId());
+        vo.setTitle(article.getTitle());
+        vo.setSummary(article.getSummary());
+        vo.setContent(article.getContent());
+        vo.setCategoryId(article.getCategoryId());
+        vo.setViewCount(article.getViewCount());
+        vo.setPublishTime(article.getPublishTime());
+        vo.setCreateTime(article.getCreateTime());
+        return Result.ok(vo);
+    }
+
+    /**
      * 按分类获取文章列表
      */
     @GetMapping("/articles")

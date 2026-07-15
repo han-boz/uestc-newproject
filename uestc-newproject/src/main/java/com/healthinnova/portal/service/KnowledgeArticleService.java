@@ -11,4 +11,9 @@ public interface KnowledgeArticleService extends IService<KnowledgeArticle> {
      */
     IPage<KnowledgeArticle> getPageByCategory(Long categoryId, Integer pageNum, Integer pageSize, String keyword, String sortBy, String sortOrder);
 
+    /**
+     * 获取文章详情并增加浏览次数
+     */
+    KnowledgeArticle getDetail(Long id);
+
 }
